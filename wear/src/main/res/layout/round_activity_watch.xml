@@ -15,8 +15,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"
-        android:format24Hour="hh:mm"
-        android:format12Hour="@null"
         android:textSize="50sp"
         android:id="@+id/timeView"/>
 </RelativeLayout>
