@@ -11,7 +11,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.wearable.view.WatchViewStub;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.Random;
@@ -30,6 +32,9 @@ public class ActivityWatch extends Activity  {
     private ImageView backgroundView;
     private boolean mActive;
 
+    private Handler mHandler;
+    private Runnable runnable;
+
     private Bitmap.Config conf;
     private Bitmap bitmapLive;
     private Canvas canvas;
@@ -47,6 +52,7 @@ public class ActivityWatch extends Activity  {
                 backgroundView = (ImageView) stub.findViewById(R.id.liveBackground);
             }
         });
+        mHandler = new Handler();
         createBackground();
 
 
@@ -55,6 +61,26 @@ public class ActivityWatch extends Activity  {
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                while (mActive) {
+                    try {
+                        Thread.sleep(500);
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d(TAG, "RUNN");
+                                if(bitmapLive != null && p!= null) {
+                                    paintBackground(mAccel);
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        };
     }
 
     private void createBackground(){
@@ -71,11 +97,13 @@ public class ActivityWatch extends Activity  {
         if(bitmapLive == null){
             createBackground();
         }
+        new Thread(runnable).start();
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
     }
     protected void onPause() {
         super.onPause();
         mActive = false;
+        mHandler.removeCallbacks(runnable);
         mSensorManager.unregisterListener(mSensorListener);
     }
 
@@ -89,13 +117,8 @@ public class ActivityWatch extends Activity  {
             mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta; // perform low-cut filter
-            if(bitmapLive != null && p!= null) {
-                paintBackground(mAccel);
-            }
         }
-
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        }
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
     };
 
     private void paintBackground(float acceleration){
