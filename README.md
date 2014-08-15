@@ -9,3 +9,6 @@ Background squares are regenerated each 0.5 second, and number of them depends o
 Yup, it is available here: [Google Play](https://play.google.com/store/apps/details?id=pl.tajchert.livewatch)
 
 If you have any fixes, or upgrades - feel free to create pull request.
+
+
+Last thing - thanks go to Cyril Mottier for very nice frames for screenshots of a Wear.
