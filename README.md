@@ -6,7 +6,7 @@ It is a watch face for **Android Wear** device. How is it special? Its backgroun
 Background squares are regenerated each 0.5 second, and number of them depends on your movement.
 
 ##Download
-Yup, it is available here: [Google Play](https://play.google.com/store/apps/details?id=pl.tajchert.livewatch)
+Yup, it is available here: [APK file ](https://github.com/tajchert/LiveWatch/raw/master/mobile/mobile-release.apk)
 
 If you have any fixes, or upgrades - feel free to create pull request.
 
